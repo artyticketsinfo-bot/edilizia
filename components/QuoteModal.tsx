@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { CompanyData, Quote, Client, QuoteStatus } from '../types';
+import html2pdf from 'html2pdf.js';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -98,25 +99,27 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, company
 
   const handleExportPDF = () => {
     const element = document.getElementById('quote-document-content');
+    if (!element) return;
+
     const opt = {
       margin: 0,
       filename: `Preventivo_${String(lastQuoteNumber + 1).padStart(3, '0')}_${formData.clientName.replace(/\s+/g, '_') || 'Generico'}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    // @ts-ignore
+    
     html2pdf().set(opt).from(element).save();
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-6 bg-construction-deep/95 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
-      <div className="bg-white w-full max-w-7xl rounded-[2.5rem] shadow-2xl border-t-[12px] border-construction-sage relative my-auto">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-6 bg-construction-deep/95 backdrop-blur-md animate-in overflow-y-auto">
+      <div className="bg-white w-full max-w-7xl rounded-3xl shadow-2xl border-t-[12px] border-construction-sage relative my-auto">
         
         <div className="sticky top-0 bg-white z-20 px-8 py-6 border-b border-slate-100 flex justify-between items-center shrink-0">
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <h2 className="text-2xl font-black text-construction-deep uppercase tracking-tighter">Generatore Documento Fiscale</h2>
-            {isSaved && <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full uppercase tracking-widest border border-emerald-200 animate-pulse">Registrato Correttamente ✓</span>}
+            {isSaved && <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full uppercase tracking-widest border border-emerald-200">Registrato Correttamente ✓</span>}
           </div>
           <button onClick={onClose} className="p-3 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -192,7 +195,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, company
             <div className="bg-slate-200 p-8 rounded-[3rem] border-2 border-dashed border-slate-300 overflow-hidden order-1 lg:order-2 flex flex-col items-center">
               <div className="w-full flex justify-between items-center mb-6 px-4">
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div> Render Anteprima A4
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full"></div> Render Anteprima A4
                 </span>
                 <span className="text-[10px] font-black text-construction-brick uppercase tracking-widest">N° {new Date().getFullYear()}/{String(lastQuoteNumber + 1).padStart(3, '0')}</span>
               </div>

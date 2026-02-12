@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { CompanyData, User } from '../../types';
+import html2pdf from 'html2pdf.js';
 
 interface CompanySettingsProps {
   data: CompanyData;
@@ -47,7 +48,7 @@ export const CompanySettings: React.FC<CompanySettingsProps> = ({ data, onSave, 
           </div>
         </div>
         
-        <div style="margin-top: 60px; text-align: center; border-top: 1px solid #eee; pt: 20px;">
+        <div style="margin-top: 60px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
           <p style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 2px;">
             Generato da EdilModern ERP il ${new Date().toLocaleDateString('it-IT')} alle ore ${new Date().toLocaleTimeString('it-IT')}
           </p>
@@ -59,16 +60,16 @@ export const CompanySettings: React.FC<CompanySettingsProps> = ({ data, onSave, 
       margin: 10,
       filename: `Scheda_Aziendale_${form.name.replace(/\s+/g, '_')}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    // @ts-ignore
+    
     html2pdf().set(opt).from(element).save();
   };
 
   return (
-    <div className="space-y-16 animate-in fade-in duration-500">
-      <section className="bg-construction-deep p-10 rounded-[2.5rem] border-b-8 border-construction-sage shadow-2xl relative overflow-hidden">
+    <div className="space-y-16 animate-in">
+      <section className="bg-construction-deep p-10 rounded-3xl border-b-8 border-construction-sage shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
         <h3 className="text-[10px] font-black text-construction-sage uppercase tracking-[0.4em] mb-8 relative z-10">Profilo Amministratore</h3>
         <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
@@ -149,7 +150,7 @@ export const CompanySettings: React.FC<CompanySettingsProps> = ({ data, onSave, 
             </button>
             
             {saved && (
-              <div className="text-construction-sage font-black uppercase text-[10px] tracking-[0.3em] flex items-center gap-3 animate-in fade-in slide-in-from-left-4">
+              <div className="text-construction-sage font-black uppercase text-[10px] tracking-[0.3em] flex items-center gap-3 animate-in">
                 <span className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-lg">✓</span>
                 Dati Aziendali Sincronizzati
               </div>

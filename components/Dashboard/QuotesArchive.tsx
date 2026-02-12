@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Quote, CompanyData, QuoteStatus } from '../../types';
+import html2pdf from 'html2pdf.js';
 
 interface QuotesArchiveProps {
   quotes: Quote[];
@@ -14,7 +15,6 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<QuoteStatus | 'ALL'>('ALL');
 
-  // Filtro avanzato: case-insensitive e ricerca parziale su nome cliente o numero documento
   const filteredQuotes = quotes.filter(q => {
     const searchLower = searchTerm.toLowerCase().trim();
     const matchesSearch = q.clientName.toLowerCase().includes(searchLower) || 
@@ -83,10 +83,10 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
       margin: 10,
       filename: `Report_Archivio_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
     };
-    // @ts-ignore
+    
     html2pdf().set(opt).from(element).save();
   };
 
@@ -96,7 +96,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
       <div style="padding: 40px; font-family: sans-serif; color: #333; max-width: 800px; margin: auto;">
         <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #52796F; padding-bottom: 20px; margin-bottom: 30px;">
           <div>
-            <h1 style="margin: 0; color: #2F3E46; font-size: 24px;">${companyData.name}</h1>
+            ${companyData.logo ? `<img src="${companyData.logo}" style="max-height: 50px; margin-bottom: 10px;" />` : `<h1 style="margin: 0; color: #2F3E46; font-size: 24px;">${companyData.name}</h1>`}
             <p style="font-size: 11px; color: #666; margin: 5px 0;">${companyData.address}<br/>P.IVA ${companyData.vat}<br/>Tel: ${companyData.phone}</p>
           </div>
           <div style="text-align: right;">
@@ -138,20 +138,19 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
       margin: 0,
       filename: `Preventivo_${quote.number.replace(/\//g, '_')}_${quote.clientName.replace(/\s+/g, '_')}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // @ts-ignore
     html2pdf().set(opt).from(element).save();
   };
 
   if (quotes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-32 px-6 text-center animate-in fade-in duration-700">
+      <div className="flex flex-col items-center justify-center py-32 px-6 text-center animate-in">
         <div className="relative mb-10">
-          <div className="w-32 h-32 bg-slate-100 rounded-[3rem] flex items-center justify-center text-6xl grayscale opacity-30">📂</div>
-          <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-construction-sage text-white rounded-2xl flex items-center justify-center text-3xl font-black shadow-2xl border-4 border-white animate-bounce">+</div>
+          <div className="w-32 h-32 bg-slate-100 rounded-3xl flex items-center justify-center text-6xl grayscale opacity-30">📂</div>
+          <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-construction-sage text-white rounded-2xl flex items-center justify-center text-3xl font-black shadow-2xl border-4 border-white">+</div>
         </div>
         <div className="space-y-4 mb-12">
           <h3 className="text-4xl font-black text-construction-deep uppercase tracking-tighter">Archivio Vuoto</h3>
@@ -161,7 +160,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
         </div>
         <button 
           onClick={onNewQuote}
-          className="px-12 py-6 bg-construction-brick text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-4 h-20"
+          className="px-12 py-6 bg-construction-brick text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-4 h-20"
         >
           <span className="text-2xl">+</span> Crea Primo Preventivo
         </button>
@@ -170,7 +169,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
   }
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-10 border-b border-slate-100">
         <div>
           <h3 className="text-3xl font-black text-construction-deep uppercase tracking-tighter">Registro Storico</h3>
@@ -193,7 +192,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-slate-50 p-6 rounded-3xl border border-slate-100">
         <div className="w-full lg:max-w-xl">
           <div className="flex justify-between items-center mb-2 px-1">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Filtro Rapido Cliente / N° Preventivo</label>
@@ -212,7 +211,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
               placeholder="Cerca per nome cliente (es: Rossi) o numero preventivo..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-14 pr-14 py-5 bg-white border-2 border-slate-200 rounded-2xl focus:border-construction-sage focus:ring-4 focus:ring-construction-sage/5 outline-none font-bold text-sm h-16 shadow-sm transition-all"
+              className="w-full pl-14 pr-14 py-5 bg-white border-2 border-slate-200 rounded-2xl focus:border-construction-sage outline-none font-bold text-sm h-16 shadow-sm transition-all"
             />
             <svg className="w-6 h-6 absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-construction-sage transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             
@@ -224,7 +223,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
           </div>
         </div>
 
-        <div className="flex gap-2 w-full lg:w-auto overflow-x-auto pb-4 lg:pb-0 scrollbar-hide">
+        <div className="flex gap-2 w-full lg:w-auto overflow-x-auto pb-4 lg:pb-0">
           {(['ALL', 'BOZZA', 'INVIATO', 'ACCETTATO', 'RESPINTO'] as const).map(s => (
             <button
               key={s}
@@ -251,7 +250,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
             </thead>
             <tbody className="divide-y divide-slate-50">
               {filteredQuotes.map(q => (
-                <tr key={q.id} className="group hover:bg-slate-50/80 transition-colors">
+                <tr key={q.id} className="group hover:bg-slate-50 transition-colors">
                   <td className="py-8">
                     <div className="font-black text-construction-brick text-base">{q.number}</div>
                     <div className="text-[9px] text-slate-400 font-black uppercase mt-1 tracking-widest">{q.date}</div>
@@ -299,7 +298,7 @@ export const QuotesArchive: React.FC<QuotesArchiveProps> = ({ quotes, onDelete, 
             </tbody>
           </table>
         ) : (
-          <div className="text-center py-24 bg-slate-50 rounded-[3rem] mt-6 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center space-y-4">
+          <div className="text-center py-24 bg-slate-50 rounded-3xl mt-6 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center space-y-4">
             <div className="text-6xl opacity-20 grayscale">🔎</div>
             <div className="space-y-1">
               <div className="font-black uppercase tracking-[0.3em] text-xs text-slate-400">Nessun documento trovato</div>

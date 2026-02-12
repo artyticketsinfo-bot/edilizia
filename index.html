@@ -5,36 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EdilModern - Costruzioni Generali e Strutture</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- Production CSS: Tailwind Standard + Custom Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-          theme: {
-            extend: {
-              colors: {
-                construction: {
-                  deep: '#2F3E46',
-                  sage: '#52796F',
-                  brick: '#C97B36',
-                  light: '#EAEAEA',
-                  darkText: '#222222',
-                  whiteOff: '#F8F9FA'
-                }
-              },
-              fontFamily: {
-                sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                display: ['Montserrat', 'sans-serif'],
-              }
-            }
-          }
-        }
-    </script>
+    
+    <!-- Favicon to resolve 404 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏗️</text></svg>">
+
     <style>
+        :root {
+            --construction-deep: #2F3E46;
+            --construction-sage: #52796F;
+            --construction-brick: #C97B36;
+            --construction-light: #EAEAEA;
+            --construction-darkText: #222222;
+            --construction-whiteOff: #F8F9FA;
+        }
+
+        /* Base Styles */
         html { scroll-behavior: smooth; }
-        body { background-color: #F8F9FA; color: #222222; }
+        body { 
+            background-color: var(--construction-whiteOff); 
+            color: var(--construction-darkText); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
         h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+
+        /* EdilModern Theme Utilities */
+        .bg-construction-deep { background-color: var(--construction-deep); }
+        .bg-construction-sage { background-color: var(--construction-sage); }
+        .bg-construction-brick { background-color: var(--construction-brick); }
+        .bg-construction-light { background-color: var(--construction-light); }
+        .bg-construction-whiteOff { background-color: var(--construction-whiteOff); }
         
+        .text-construction-deep { color: var(--construction-deep); }
+        .text-construction-sage { color: var(--construction-sage); }
+        .text-construction-brick { color: var(--construction-brick); }
+        
+        .border-construction-deep { border-color: var(--construction-deep); }
+        .border-construction-sage { border-color: var(--construction-sage); }
+        .border-construction-brick { border-color: var(--construction-brick); }
+        .border-construction-light { border-color: var(--construction-light); }
+
+        /* Component Specific */
         .hero-section {
           position: relative;
           background-image: url("https://tse1.mm.bing.net/th/id/OIP.IbUt-Ye7LS0BhTIU8ZIYOgHaEO?rs=1&pid=ImgDetMain&o=7&rm=3");
@@ -58,14 +72,14 @@
         }
 
         .btn-sage { 
-          background-color: #52796F; 
-          @apply transition-all duration-300 transform active:scale-95;
+          background-color: var(--construction-sage); 
+          transition: all 0.3s ease;
         }
-        .btn-sage:hover { background-color: #40594D; }
+        .btn-sage:hover { background-color: #40594D; transform: translateY(-2px); }
         
-        .text-brick { color: #C97B36; }
-        .bg-brick { background-color: #C97B36; }
-        .border-sage { border-color: #52796F; }
+        .text-brick { color: var(--construction-brick); }
+        .bg-brick { background-color: var(--construction-brick); }
+        .border-sage { border-color: var(--construction-sage); }
 
         /* Document Style for Quote PDF */
         .quote-document {
@@ -75,16 +89,25 @@
         }
         .quote-document h1 {
           font-family: 'Montserrat', sans-serif;
-          color: #2F3E46;
+          color: var(--construction-deep);
+        }
+
+        /* Animations */
+        .animate-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
+
 <script type="importmap">
 {
   "imports": {
     "react/": "https://esm.sh/react@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
+    "html2pdf.js": "https://esm.sh/html2pdf.js@0.10.1"
   }
 }
 </script>

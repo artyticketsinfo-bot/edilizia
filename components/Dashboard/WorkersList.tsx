@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Worker } from '../../types';
+import html2pdf from 'html2pdf.js';
 
 interface WorkersListProps {
   workers: Worker[];
@@ -64,7 +65,7 @@ export const WorkersList: React.FC<WorkersListProps> = ({ workers, onUpdate }) =
           </tbody>
         </table>
         
-        <div style="margin-top: 40px; border-top: 1px solid #eee; pt: 15px; font-size: 10px; color: #999;">
+        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 15px; font-size: 10px; color: #999;">
           Totale Dipendenti/Collaboratori: ${workers.length} | Data Export: ${new Date().toLocaleDateString('it-IT')}
         </div>
       </div>
@@ -74,15 +75,15 @@ export const WorkersList: React.FC<WorkersListProps> = ({ workers, onUpdate }) =
       margin: 10,
       filename: `Report_Personale_EdilModern.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    // @ts-ignore
+    
     html2pdf().set(opt).from(element).save();
   };
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-500">
+    <div className="space-y-12 animate-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-100">
         <div>
           <h3 className="text-2xl font-black text-construction-deep uppercase tracking-tighter">Squadra & Personale</h3>

@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Client, Quote, CompanyData } from '../../types';
+import html2pdf from 'html2pdf.js';
 
 interface ClientsListProps {
   clients: Client[];
@@ -89,10 +90,10 @@ export const ClientsList: React.FC<ClientsListProps> = ({ clients, setClients, q
       margin: 10,
       filename: `Database_Clienti_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    // @ts-ignore
+    
     html2pdf().set(opt).from(element).save();
   };
 
@@ -164,15 +165,15 @@ export const ClientsList: React.FC<ClientsListProps> = ({ clients, setClients, q
       margin: 10,
       filename: `Storico_Cliente_${client.name.replace(/\s+/g, '_')}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    // @ts-ignore
+    
     html2pdf().set(opt).from(element).save();
   };
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-500">
+    <div className="space-y-12 animate-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-100">
         <div>
           <h3 className="text-2xl font-black text-construction-deep uppercase tracking-tighter">Database Clienti</h3>
@@ -331,7 +332,7 @@ export const ClientsList: React.FC<ClientsListProps> = ({ clients, setClients, q
                   </div>
 
                   {isExpanded && (
-                    <div className="bg-slate-50/50 p-6 md:p-8 border-t border-slate-50 animate-in fade-in slide-in-from-top-4">
+                    <div className="bg-slate-50/50 p-6 md:p-8 border-t border-slate-50 animate-in">
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-1 space-y-4">
                           <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Dettagli Anagrafici</h5>
