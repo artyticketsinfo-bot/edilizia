@@ -109,6 +109,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, company
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     
+    // @ts-ignore
     html2pdf().set(opt).from(element).save();
   };
 
@@ -205,7 +206,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, company
                   <div className="flex justify-between items-start border-b-[6px] border-construction-sage pb-10 mb-12">
                     <div className="flex gap-6 items-start">
                       {companyData.logo && (
-                        <img src={companyData.logo} alt="Logo" style="max-height: 80px; max-width: 150px; object-fit: contain;" />
+                        <img src={companyData.logo} alt="Logo" style={{maxHeight: '80px', maxWidth: '150px', objectFit: 'contain'}} />
                       )}
                       <div>
                         <h1 className="text-4xl font-black text-construction-deep tracking-tighter uppercase leading-none mb-4">
