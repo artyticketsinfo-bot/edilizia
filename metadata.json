@@ -1,0 +1,7 @@
+{
+  "name": "EdilModern ERP - Gestionale Privato",
+  "description": "Sistema ERP professionale per la gestione di preventivi, database clienti e amministrazione cantiere.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
